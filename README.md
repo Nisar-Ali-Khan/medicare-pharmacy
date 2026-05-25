@@ -1,9 +1,9 @@
-# 💊 MediCare Pharmacy — Web Application
+# MediCare Pharmacy — Web Application
 ## CEP Assignment #4 | Web Engineering
 
 ---
 
-## 📋 Project Overview
+## Project Overview
 MediCare is a full-stack dynamic web application for an online pharmacy built with:
 - **Frontend:** HTML5, CSS3, Vanilla JavaScript
 - **Backend:** PHP 8.x
@@ -11,7 +11,7 @@ MediCare is a full-stack dynamic web application for an online pharmacy built wi
 
 ---
 
-## 🗂️ Project Structure
+## Project Structure
 ```
 pharmacy/
 ├── index.html          ← Homepage
@@ -37,7 +37,7 @@ pharmacy/
 
 ---
 
-## ⚙️ Setup Instructions
+## Setup Instructions
 
 ### 1. Requirements
 - XAMPP / WAMP / LAMP (PHP 8+ & MySQL)
@@ -61,23 +61,23 @@ pharmacy/
 
 ---
 
-## ✨ Features
+## Features
 
 ### Customer Features
-- 🏠 Homepage with categories & featured products
-- 🔍 Product search & category filtering
-- 🛒 Shopping cart (add, update, remove items)
-- 📦 Place orders with delivery address
-- 🔐 User registration & login
-- 📋 View order history & status tracking
-- 💬 Contact form
+- Homepage with categories & featured products
+- Product search & category filtering
+- Shopping cart (add, update, remove items)
+- Place orders with the delivery address
+- User registration & login
+- View order history & status tracking
+- Contact form
 
 ### Admin Features
-- 📊 Dashboard with stats (products, orders, revenue, users)
-- 💊 Product management (add, delete, view)
-- 📦 Order management with status updates
-- 👥 User list
-- 📬 Contact messages inbox
+- Dashboard with stats (products, orders, revenue, users)
+- Product management (add, delete, view)
+- Order management with status updates
+- User list
+- Contact messages inbox
 
 ### Security Features
 - Password hashing (bcrypt)
@@ -85,11 +85,11 @@ pharmacy/
 - Session-based authentication
 - Role-based access control (admin/customer)
 - Input validation & sanitization
-- XSS prevention via `strip_tags()`
+- XSS prevention via `strip_tags().`
 
 ---
 
-## 🧪 Testing Checklist
+## Testing Checklist
 - [ ] User registration with validation
 - [ ] Login/logout flow
 - [ ] Add products to cart
