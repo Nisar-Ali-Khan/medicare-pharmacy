@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard — MediCare</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="admin-layout">
+  <!-- Sidebar -->
+  <aside class="admin-sidebar">
+    <div style="padding:0.5rem 0 1.5rem">
+      <a href="index.html" class="nav-logo" style="color:white;font-size:1.2rem">
+        <div class="logo-icon">⚕</div>
+        Medi<span style="color:var(--accent2)">Care</span>
+      </a>
+    </div>
+    <h3>Dashboard</h3>
+    <div class="sidebar-link active" onclick="showSection('overview')">📊 Overview</div>
+    <div class="sidebar-link" onclick="showSection('products')">💊 Products</div>
+    <div class="sidebar-link" onclick="showSection('orders')">📦 Orders</div>
+    <div class="sidebar-link" onclick="showSection('users')">👥 Users</div>
+    <div class="sidebar-link" onclick="showSection('messages')">📬 Messages</div>
+    <h3>Actions</h3>
+    <div class="sidebar-link" onclick="showSection('add-product')">➕ Add Product</div>
+    <a href="index.html" class="sidebar-link">🏠 View Site</a>
+    <div class="sidebar-link" onclick="logout()" style="color:#ff6b6b">🚪 Logout</div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="admin-content">
+    <!-- Access Guard -->
+    <div id="access-denied" class="hidden" style="text-align:center;padding:4rem">
+      <div style="font-size:4rem;margin-bottom:1rem">🔒</div>
+      <h2>Admin Access Required</h2>
+      <p style="color:var(--text-muted);margin:1rem 0">Please login with admin credentials</p>
+      <button class="btn btn-primary" onclick="showModal('login-modal')">Login</button>
+    </div>
+
+    <!-- Overview Section -->
+    <div id="section-overview">
+      <h2 style="font-size:1.6rem;font-weight:800;margin-bottom:1.5rem">Dashboard Overview</h2>
+      <div class="admin-stats" id="admin-stats">
+        <div class="stat-card"><div class="stat-icon">💊</div><h3 id="stat-products">—</h3><p>Total Products</p></div>
+        <div class="stat-card"><div class="stat-icon">📦</div><h3 id="stat-orders">—</h3><p>Total Orders</p></div>
+        <div class="stat-card"><div class="stat-icon">👥</div><h3 id="stat-users">—</h3><p>Registered Users</p></div>
+        <div class="stat-card"><div class="stat-icon">💰</div><h3 id="stat-revenue">—</h3><p>Total Revenue (Rs.)</p></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h3>Recent Orders</h3></div>
+        <div id="recent-orders-table"><div class="spinner"></div></div>
+      </div>
+    </div>
+
+    <!-- Products Section -->
+    <div id="section-products" class="hidden">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem">
+        <h2 style="font-size:1.6rem;font-weight:800">Products Management</h2>
+        <button class="btn btn-primary" onclick="showSection('add-product')">+ Add Product</button>
+      </div>
+      <div class="card">
+        <div id="products-table"><div class="spinner"></div></div>
+      </div>
+    </div>
+
+    <!-- Orders Section -->
+    <div id="section-orders" class="hidden">
+      <h2 style="font-size:1.6rem;font-weight:800;margin-bottom:1.5rem">Orders Management</h2>
+      <div class="card">
+        <div id="orders-table"><div class="spinner"></div></div>
+      </div>
+    </div>
+
+    <!-- Users Section -->
+    <div id="section-users" class="hidden">
+      <h2 style="font-size:1.6rem;font-weight:800;margin-bottom:1.5rem">Registered Users</h2>
+      <div class="card">
+        <div id="users-table"><div class="spinner"></div></div>
+      </div>
+    </div>
+
+    <!-- Messages Section -->
+    <div id="section-messages" class="hidden">
+      <h2 style="font-size:1.6rem;font-weight:800;margin-bottom:1.5rem">Contact Messages</h2>
+      <div class="card">
+        <div id="messages-table"><div class="spinner"></div></div>
+      </div>
+    </div>
+
+    <!-- Add Product Section -->
+    <div id="section-add-product" class="hidden">
+      <h2 style="font-size:1.6rem;font-weight:800;margin-bottom:1.5rem">Add New Product</h2>
+      <div class="card" style="max-width:600px">
+        <div id="add-product-alert"></div>
+        <form onsubmit="handleAddProduct(event)">
+          <div class="grid-2">
+            <div class="form-group">
+              <label>Product Name *</label>
+              <input type="text" name="name" placeholder="e.g. Paracetamol 500mg" required>
+            </div>
+            <div class="form-group">
+              <label>Category *</label>
+              <select name="category_id" id="ap-category" required></select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Description</label>
+            <textarea name="description" placeholder="Product description..." rows="3"></textarea>
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label>Price (Rs.) *</label>
+              <input type="number" name="price" placeholder="0.00" step="0.01" min="0" required>
+            </div>
+            <div class="form-group">
+              <label>Stock Quantity *</label>
+              <input type="number" name="stock" placeholder="0" min="0" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+              <input type="checkbox" name="requires_prescription" style="width:auto">
+              Requires Prescription (Rx)
+            </label>
+          </div>
+          <button type="submit" class="btn btn-primary">Add Product</button>
+          <button type="button" class="btn btn-outline" onclick="showSection('products')" style="margin-left:0.5rem">Cancel</button>
+        </form>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Update Order Status Modal -->
+<div class="modal-overlay" id="status-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>Update Order Status</h2>
+      <button class="modal-close" onclick="closeModal('status-modal')">✕</button>
+    </div>
+    <input type="hidden" id="status-order-id">
+    <div class="form-group">
+      <label>New Status</label>
+      <select id="status-select">
+        <option value="pending">Pending</option>
+        <option value="processing">Processing</option>
+        <option value="shipped">Shipped</option>
+        <option value="delivered">Delivered</option>
+        <option value="cancelled">Cancelled</option>
+      </select>
+    </div>
+    <button class="btn btn-primary btn-full" onclick="updateOrderStatus()">Update Status</button>
+  </div>
+</div>
+
+<script src="js/navbar.js"></script>
+<script src="js/main.js"></script>
+<script>
+const sections = ['overview','products','orders','users','messages','add-product'];
+
+function showSection(name) {
+  sections.forEach(s => {
+    document.getElementById(`section-${s}`)?.classList.add('hidden');
+  });
+  document.getElementById(`section-${name}`)?.classList.remove('hidden');
+  document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+
+  // Load data for section
+  if (name === 'overview')     loadOverview();
+  if (name === 'products')     loadProductsTable();
+  if (name === 'orders')       loadOrdersTable();
+  if (name === 'users')        loadUsersTable();
+  if (name === 'messages')     loadMessagesTable();
+  if (name === 'add-product')  loadCategoriesToForm();
+}
+
+function onAuthReady(user) {
+  if (!user || user.role !== 'admin') {
+    sections.forEach(s => document.getElementById(`section-${s}`)?.classList.add('hidden'));
+    document.getElementById('access-denied')?.classList.remove('hidden');
+    return;
+  }
+  loadOverview();
+}
+
+async function loadOverview() {
+  try {
+    const [pRes, oRes] = await Promise.all([
+      fetch('php/products.php?action=list'),
+      fetch('php/orders.php?action=all_orders')
+    ]);
+    const pData = await pRes.json();
+    const oData = await oRes.json();
+    const products = pData.products || [];
+    const orders   = oData.orders   || [];
+    const revenue  = orders.reduce((s, o) => s + parseFloat(o.total_amount), 0);
+    const users    = new Set(orders.map(o => o.user_id)).size;
+
+    document.getElementById('stat-products').textContent = products.length;
+    document.getElementById('stat-orders').textContent   = orders.length;
+    document.getElementById('stat-users').textContent    = users;
+    document.getElementById('stat-revenue').textContent  = `${revenue.toFixed(0)}`;
+
+    // Recent orders table
+    const recent = orders.slice(0, 8);
+    document.getElementById('recent-orders-table').innerHTML = `
+      <div style="overflow-x:auto">
+      <table class="data-table">
+        <thead><tr><th>Order #</th><th>Customer</th><th>Amount</th><th>Status</th><th>Date</th><th>Action</th></tr></thead>
+        <tbody>
+          ${recent.map(o => `
+            <tr>
+              <td><strong>#${o.id}</strong></td>
+              <td>${o.full_name}</td>
+              <td>Rs. ${parseFloat(o.total_amount).toFixed(0)}</td>
+              <td><span class="status-badge status-${o.status}">${o.status}</span></td>
+              <td>${new Date(o.created_at).toLocaleDateString()}</td>
+              <td><button class="btn btn-sm btn-outline" onclick="openStatusModal(${o.id},'${o.status}')">Update</button></td>
+            </tr>`).join('')}
+        </tbody>
+      </table></div>`;
+  } catch(e) { console.error(e); }
+}
+
+async function loadProductsTable() {
+  const res  = await fetch('php/products.php?action=list');
+  const data = await res.json();
+  const products = data.products || [];
+  document.getElementById('products-table').innerHTML = `
+    <div style="overflow-x:auto">
+    <table class="data-table">
+      <thead><tr><th>ID</th><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Rx</th><th>Action</th></tr></thead>
+      <tbody>
+        ${products.map(p => `
+          <tr>
+            <td>#${p.id}</td>
+            <td><strong>${p.name}</strong></td>
+            <td>${p.category_name}</td>
+            <td>Rs. ${parseFloat(p.price).toFixed(0)}</td>
+            <td>${p.stock < 10 ? `<span style="color:var(--accent2);font-weight:700">${p.stock} ⚠</span>` : p.stock}</td>
+            <td>${p.requires_prescription == 1 ? '✅' : '—'}</td>
+            <td><button class="btn btn-sm btn-danger" onclick="deleteProduct(${p.id})">Delete</button></td>
+          </tr>`).join('')}
+      </tbody>
+    </table></div>`;
+}
+
+async function loadOrdersTable() {
+  const res  = await fetch('php/orders.php?action=all_orders');
+  const data = await res.json();
+  const orders = data.orders || [];
+  document.getElementById('orders-table').innerHTML = `
+    <div style="overflow-x:auto">
+    <table class="data-table">
+      <thead><tr><th>Order #</th><th>Customer</th><th>Email</th><th>Amount</th><th>Items</th><th>Status</th><th>Date</th><th>Action</th></tr></thead>
+      <tbody>
+        ${orders.map(o => `
+          <tr>
+            <td><strong>#${o.id}</strong></td>
+            <td>${o.full_name}</td>
+            <td style="font-size:0.8rem">${o.email}</td>
+            <td>Rs. ${parseFloat(o.total_amount).toFixed(0)}</td>
+            <td>${o.item_count}</td>
+            <td><span class="status-badge status-${o.status}">${o.status}</span></td>
+            <td>${new Date(o.created_at).toLocaleDateString()}</td>
+            <td><button class="btn btn-sm btn-outline" onclick="openStatusModal(${o.id},'${o.status}')">Update</button></td>
+          </tr>`).join('')}
+      </tbody>
+    </table></div>`;
+}
+
+async function loadUsersTable() {
+  // We'll fetch from a new endpoint
+  const res  = await fetch('php/admin.php?action=users');
+  const data = await res.json();
+  const users = data.users || [];
+  document.getElementById('users-table').innerHTML = `
+    <table class="data-table">
+      <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Role</th><th>Joined</th></tr></thead>
+      <tbody>
+        ${users.map(u => `
+          <tr>
+            <td>#${u.id}</td>
+            <td>${u.full_name}</td>
+            <td>${u.email}</td>
+            <td>${u.phone || '—'}</td>
+            <td><span class="status-badge ${u.role==='admin'?'status-processing':'status-delivered'}">${u.role}</span></td>
+            <td>${new Date(u.created_at).toLocaleDateString()}</td>
+          </tr>`).join('')}
+      </tbody>
+    </table>`;
+}
+
+async function loadMessagesTable() {
+  const res  = await fetch('php/admin.php?action=messages');
+  const data = await res.json();
+  const msgs = data.messages || [];
+  document.getElementById('messages-table').innerHTML = msgs.length ? `
+    <table class="data-table">
+      <thead><tr><th>From</th><th>Email</th><th>Message</th><th>Date</th></tr></thead>
+      <tbody>
+        ${msgs.map(m => `
+          <tr>
+            <td><strong>${m.name}</strong></td>
+            <td>${m.email}</td>
+            <td style="max-width:300px;font-size:0.85rem">${m.message}</td>
+            <td>${new Date(m.created_at).toLocaleDateString()}</td>
+          </tr>`).join('')}
+      </tbody>
+    </table>` : '<div class="empty-state"><span class="empty-icon">📬</span><h3>No messages yet</h3></div>';
+}
+
+async function loadCategoriesToForm() {
+  const cats = await fetchCategories();
+  const sel  = document.getElementById('ap-category');
+  if (sel) sel.innerHTML = cats.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+}
+
+async function handleAddProduct(e) {
+  e.preventDefault();
+  const form = e.target;
+  const btn  = form.querySelector('button[type=submit]');
+  btn.disabled = true; btn.textContent = 'Adding...';
+  const fd = new FormData(form);
+  const res  = await fetch('php/products.php?action=add', { method: 'POST', body: fd });
+  const data = await res.json();
+  if (data.success) {
+    setAlert('add-product-alert', 'Product added successfully!', 'success');
+    form.reset();
+    loadCategoriesToForm();
+  } else {
+    setAlert('add-product-alert', data.error || 'Failed to add product');
+  }
+  btn.disabled = false; btn.textContent = 'Add Product';
+}
+
+async function deleteProduct(id) {
+  if (!confirm('Delete this product?')) return;
+  const res  = await fetch(`php/products.php?action=delete&id=${id}`);
+  const data = await res.json();
+  if (data.success) { showToast('Product deleted', 'success'); loadProductsTable(); }
+}
+
+function openStatusModal(orderId, currentStatus) {
+  document.getElementById('status-order-id').value = orderId;
+  document.getElementById('status-select').value = currentStatus;
+  showModal('status-modal');
+}
+
+async function updateOrderStatus() {
+  const orderId = document.getElementById('status-order-id').value;
+  const status  = document.getElementById('status-select').value;
+  const fd = new FormData();
+  fd.append('order_id', orderId);
+  fd.append('status', status);
+  const res  = await fetch('php/orders.php?action=update_status', { method: 'POST', body: fd });
+  const data = await res.json();
+  if (data.success) {
+    closeModal('status-modal');
+    showToast('Status updated!', 'success');
+    loadOrdersTable();
+    loadOverview();
+  }
+}
+</script>
+</body>
+</html>

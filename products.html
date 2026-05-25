@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Products — MediCare Pharmacy</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="page-header">
+  <h1>💊 Our Products</h1>
+  <p>Genuine medicines and healthcare products at your fingertips</p>
+</div>
+
+<section class="section">
+  <div class="section-inner">
+    <!-- Search -->
+    <div class="search-bar">
+      <input type="text" id="search-input" placeholder="Search medicines, vitamins..." oninput="handleSearch()">
+      <button class="btn btn-primary" onclick="handleSearch()">🔍 Search</button>
+    </div>
+
+    <!-- Category Filter -->
+    <div class="filter-tabs" id="category-tabs">
+      <button class="filter-tab active" data-cat="0" onclick="filterByCategory(0, this)">All Products</button>
+    </div>
+
+    <!-- Products Grid -->
+    <div class="cards-grid" id="products-grid">
+      <div class="spinner"></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a class="nav-logo" href="index.html" style="color:white;margin-bottom:1rem;display:inline-flex">
+        <div class="logo-icon">⚕</div>Medi<span style="color:var(--accent2)">Care</span>
+      </a>
+      <p>Your trusted online pharmacy in Pakistan.</p>
+    </div>
+    <div><h4>Quick Links</h4><ul><li><a href="index.html">Home</a></li><li><a href="products.html">Products</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+    <div><h4>Support</h4><ul><li><a href="#">📞 0300-1234567</a></li><li><a href="#">📧 info@medicare.pk</a></li></ul></div>
+    <div><h4>Hours</h4><ul><li><a href="#">Mon–Sat 9AM–9PM</a></li><li><a href="#">Emergency: 24/7</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><p>© 2024 MediCare Pharmacy</p></div>
+</footer>
+
+<script src="js/navbar.js"></script>
+<script src="js/main.js"></script>
+<script>
+let searchTimer;
+let activeCat = 0;
+
+async function loadCategories() {
+  const cats = await fetchCategories();
+  const tabs = document.getElementById('category-tabs');
+  cats.forEach(c => {
+    const btn = document.createElement('button');
+    btn.className = 'filter-tab';
+    btn.dataset.cat = c.id;
+    btn.textContent = `${c.icon} ${c.name}`;
+    btn.onclick = () => filterByCategory(c.id, btn);
+    tabs.appendChild(btn);
+  });
+}
+
+async function loadProducts(catId = 0, query = '') {
+  const grid = document.getElementById('products-grid');
+  grid.innerHTML = '<div class="spinner"></div>';
+  let data;
+  if (query) {
+    const res = await fetch(`php/products.php?action=search&q=${encodeURIComponent(query)}`);
+    data = await res.json();
+  } else {
+    data = await fetchProducts(catId ? { category: catId } : {});
+  }
+  const products = data.products || [];
+  grid.innerHTML = products.length
+    ? products.map(productCard).join('')
+    : `<div class="empty-state" style="grid-column:1/-1">
+        <span class="empty-icon">🔍</span>
+        <h3>No products found</h3>
+        <p>Try a different search or category</p>
+      </div>`;
+}
+
+function filterByCategory(catId, btn) {
+  activeCat = catId;
+  document.getElementById('search-input').value = '';
+  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  loadProducts(catId);
+}
+
+function handleSearch() {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => {
+    const q = document.getElementById('search-input').value.trim();
+    if (q) {
+      loadProducts(0, q);
+    } else {
+      loadProducts(activeCat);
+    }
+  }, 400);
+}
+
+// Check URL params for category
+const urlParams = new URLSearchParams(window.location.search);
+const urlCat = parseInt(urlParams.get('cat')) || 0;
+
+async function init() {
+  await loadCategories();
+  if (urlCat) {
+    activeCat = urlCat;
+    const btn = document.querySelector(`[data-cat="${urlCat}"]`);
+    if (btn) {
+      document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+    }
+  }
+  loadProducts(urlCat);
+}
+init();
+</script>
+</body>
+</html>

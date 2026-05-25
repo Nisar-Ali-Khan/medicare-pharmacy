@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Orders — MediCare Pharmacy</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="page-header">
+  <h1>📦 My Orders</h1>
+  <p>Track all your medicine orders</p>
+</div>
+
+<section class="section">
+  <div class="section-inner">
+    <div id="orders-container"><div class="spinner"></div></div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a class="nav-logo" href="index.html" style="color:white;margin-bottom:1rem;display:inline-flex">
+        <div class="logo-icon">⚕</div>Medi<span style="color:var(--accent2)">Care</span>
+      </a>
+    </div>
+    <div><h4>Quick Links</h4><ul><li><a href="index.html">Home</a></li><li><a href="products.html">Products</a></li></ul></div>
+    <div><h4>Support</h4><ul><li><a href="#">📞 0300-1234567</a></li></ul></div>
+    <div><h4>Hours</h4><ul><li><a href="#">Mon–Sat 9AM–9PM</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><p>© 2024 MediCare Pharmacy</p></div>
+</footer>
+
+<script src="js/navbar.js"></script>
+<script src="js/main.js"></script>
+<script>
+function onAuthReady(user) {
+  if (!user) {
+    document.getElementById('orders-container').innerHTML = `
+      <div class="empty-state">
+        <span class="empty-icon">🔐</span>
+        <h3>Login Required</h3>
+        <p>Please login to view your orders</p>
+        <button class="btn btn-primary mt-2" onclick="showModal('login-modal')">Login</button>
+      </div>`;
+    return;
+  }
+  loadMyOrders();
+}
+
+function onLoginSuccess() { loadMyOrders(); }
+
+async function loadMyOrders() {
+  const res  = await fetch('php/orders.php?action=my_orders');
+  const data = await res.json();
+  const orders = data.orders || [];
+  const container = document.getElementById('orders-container');
+
+  if (orders.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <span class="empty-icon">📦</span>
+        <h3>No Orders Yet</h3>
+        <p>You haven't placed any orders. Start shopping!</p>
+        <a href="products.html" class="btn btn-primary mt-2">Browse Products</a>
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = orders.map(o => `
+    <div class="card" style="margin-bottom:1.2rem">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem">
+        <div>
+          <div style="font-weight:800;font-size:1.1rem">Order #${o.id}</div>
+          <div style="color:var(--text-muted);font-size:0.85rem;margin-top:0.2rem">${new Date(o.created_at).toLocaleString()}</div>
+        </div>
+        <div style="text-align:right">
+          <span class="status-badge status-${o.status}">${o.status.charAt(0).toUpperCase() + o.status.slice(1)}</span>
+          <div style="font-size:1.2rem;font-weight:800;color:var(--primary);margin-top:0.4rem">Rs. ${parseFloat(o.total_amount).toFixed(0)}</div>
+        </div>
+      </div>
+      <hr style="margin:1rem 0;border:none;border-top:1px solid var(--border)">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;font-size:0.88rem">
+        <div><span style="color:var(--text-muted)">Items:</span> <strong>${o.item_count} product(s)</strong></div>
+        <div><span style="color:var(--text-muted)">Delivery to:</span> <strong>${o.delivery_address?.substring(0, 40)}...</strong></div>
+      </div>
+      ${o.status === 'delivered' ? '<div class="alert alert-success" style="margin-top:1rem">✅ Order delivered successfully!</div>' : ''}
+      ${o.status === 'shipped' ? '<div class="alert alert-warning" style="margin-top:1rem">🚚 Your order is on its way!</div>' : ''}
+    </div>`).join('');
+}
+</script>
+</body>
+</html>

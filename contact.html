@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us — MediCare Pharmacy</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="page-header">
+  <h1>📬 Contact Us</h1>
+  <p>We're here to help — reach out anytime</p>
+</div>
+
+<section class="section">
+  <div class="section-inner">
+    <div class="grid-2" style="gap:3rem">
+      <!-- Contact Form -->
+      <div>
+        <div class="card">
+          <div class="card-header">
+            <h3>Send us a Message</h3>
+          </div>
+          <div id="contact-alert"></div>
+          <form id="contact-form" onsubmit="handleContactForm(event)">
+            <div class="form-group">
+              <label>Your Name</label>
+              <input type="text" name="name" placeholder="Full name" required>
+            </div>
+            <div class="form-group">
+              <label>Email Address</label>
+              <input type="email" name="email" placeholder="your@email.com" required>
+            </div>
+            <div class="form-group">
+              <label>Subject</label>
+              <select name="subject">
+                <option>Order Inquiry</option>
+                <option>Product Question</option>
+                <option>Prescription Help</option>
+                <option>Complaint</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Message</label>
+              <textarea name="message" placeholder="Write your message..." required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full">Send Message 📤</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Contact Info -->
+      <div>
+        <div class="card" style="margin-bottom:1.5rem">
+          <h3 style="font-weight:700;margin-bottom:1.5rem">Get In Touch</h3>
+          <div style="display:flex;flex-direction:column;gap:1.2rem">
+            <div style="display:flex;gap:1rem;align-items:flex-start">
+              <div style="font-size:1.8rem">📍</div>
+              <div>
+                <div style="font-weight:600;margin-bottom:0.2rem">Address</div>
+                <div style="color:var(--text-muted);font-size:0.9rem">Plot 15, Blue Area, Islamabad, Pakistan</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:1rem;align-items:flex-start">
+              <div style="font-size:1.8rem">📞</div>
+              <div>
+                <div style="font-weight:600;margin-bottom:0.2rem">Phone</div>
+                <div style="color:var(--text-muted);font-size:0.9rem">0300-1234567 (Mon–Sat 9AM–9PM)</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:1rem;align-items:flex-start">
+              <div style="font-size:1.8rem">📧</div>
+              <div>
+                <div style="font-weight:600;margin-bottom:0.2rem">Email</div>
+                <div style="color:var(--text-muted);font-size:0.9rem">info@medicare.pk</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:1rem;align-items:flex-start">
+              <div style="font-size:1.8rem">💬</div>
+              <div>
+                <div style="font-weight:600;margin-bottom:0.2rem">WhatsApp</div>
+                <div style="color:var(--text-muted);font-size:0.9rem">0321-7654321 (24/7 Emergency)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="background:var(--accent);border-color:var(--border)">
+          <h3 style="font-weight:700;margin-bottom:1rem;color:var(--primary)">⏰ Working Hours</h3>
+          <table style="width:100%;font-size:0.9rem">
+            <tr style="padding:0.5rem 0">
+              <td style="padding:0.4rem 0;font-weight:600">Monday – Friday</td>
+              <td style="color:var(--text-muted)">9:00 AM – 9:00 PM</td>
+            </tr>
+            <tr>
+              <td style="padding:0.4rem 0;font-weight:600">Saturday</td>
+              <td style="color:var(--text-muted)">10:00 AM – 6:00 PM</td>
+            </tr>
+            <tr>
+              <td style="padding:0.4rem 0;font-weight:600">Sunday</td>
+              <td style="color:var(--accent2);font-weight:600">Emergency Only</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <div style="margin-top:4rem">
+      <div class="section-header">
+        <div class="section-label">FAQ</div>
+        <h2>Frequently Asked Questions</h2>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem">
+        <div class="card">
+          <h4 style="font-weight:700;margin-bottom:0.5rem">How do I upload a prescription?</h4>
+          <p style="color:var(--text-muted);font-size:0.9rem">After placing your order, you can upload the prescription through your order confirmation page or email it to us at rx@medicare.pk</p>
+        </div>
+        <div class="card">
+          <h4 style="font-weight:700;margin-bottom:0.5rem">What is your delivery time?</h4>
+          <p style="color:var(--text-muted);font-size:0.9rem">Same-day delivery in Islamabad & Rawalpindi. 2–3 business days for other cities across Pakistan.</p>
+        </div>
+        <div class="card">
+          <h4 style="font-weight:700;margin-bottom:0.5rem">Can I return medicines?</h4>
+          <p style="color:var(--text-muted);font-size:0.9rem">Returns are accepted within 24 hours for damaged or incorrect items. Prescription medicines cannot be returned once dispensed.</p>
+        </div>
+        <div class="card">
+          <h4 style="font-weight:700;margin-bottom:0.5rem">What payment methods are accepted?</h4>
+          <p style="color:var(--text-muted);font-size:0.9rem">We accept Cash on Delivery, Easypaisa, JazzCash, bank transfer, and all major credit/debit cards.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a class="nav-logo" href="index.html" style="color:white;margin-bottom:1rem;display:inline-flex">
+        <div class="logo-icon">⚕</div>Medi<span style="color:var(--accent2)">Care</span>
+      </a>
+      <p>Your trusted online pharmacy in Pakistan.</p>
+    </div>
+    <div><h4>Quick Links</h4><ul><li><a href="index.html">Home</a></li><li><a href="products.html">Products</a></li><li><a href="about.html">About</a></li></ul></div>
+    <div><h4>Support</h4><ul><li><a href="#">📞 0300-1234567</a></li><li><a href="#">📧 info@medicare.pk</a></li></ul></div>
+    <div><h4>Hours</h4><ul><li><a href="#">Mon–Sat 9AM–9PM</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><p>© 2024 MediCare Pharmacy</p></div>
+</footer>
+
+<script src="js/navbar.js"></script>
+<script src="js/main.js"></script>
+<script>
+async function handleContactForm(e) {
+  e.preventDefault();
+  const form = e.target;
+  const btn  = form.querySelector('button[type=submit]');
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
+
+  const fd = new FormData(form);
+  try {
+    const res  = await fetch('php/contact.php', { method: 'POST', body: fd });
+    const data = await res.json();
+    if (data.success) {
+      setAlert('contact-alert', 'Message sent successfully! We\'ll get back to you soon.', 'success');
+      form.reset();
+    } else {
+      setAlert('contact-alert', data.error || 'Failed to send message');
+    }
+  } catch(e) {
+    setAlert('contact-alert', 'Something went wrong. Please try again.');
+  }
+  btn.disabled = false;
+  btn.textContent = 'Send Message 📤';
+}
+</script>
+</body>
+</html>
